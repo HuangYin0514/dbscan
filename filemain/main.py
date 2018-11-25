@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import datasets
 import math
+
 if __name__ == '__main__':
     # X1, y1 = datasets.make_circles(n_samples=5000, factor=.6,
     #                                noise=.05)
@@ -23,9 +24,7 @@ if __name__ == '__main__':
 
     Y = X[1:, 0:2].astype(np.float64)
     Y = (math.pi / 180) * Y
-    y_pred = DBSCAN(eps=4/111000, min_samples=66).fit_predict(Y)
-
-
+    y_pred = DBSCAN(eps=4 / 1110000, min_samples=3).fit_predict(Y)
 
     # plt.scatter(Y[:200, 0], Y[:200, 1], c=y_pred[:200])
     # # plt.axis([0, 100, 0, 200])
@@ -36,5 +35,10 @@ if __name__ == '__main__':
 
     from IMR import initIMR
 
-    imr = initIMR(y_pred.reshape(1, -1), T=10)
-    print(imr)
+    T = 10
+    I_CR = y_pred.reshape(1, -1)
+    I_MR = initIMR(I_CR, T=T)
+    from InitT1T2 import initT1T2
+
+    T_MR1, T_MR2 = initT1T2(I_CR, I_MR, T=T)
+    print()
