@@ -23,9 +23,10 @@ if __name__ == '__main__':
     from sklearn.cluster import DBSCAN
 
     Y = X[1:, 0:2].astype(np.float64)
-    Y = (math.pi / 180) * Y
-    y_pred = DBSCAN(eps=4 / 1110000, min_samples=3).fit_predict(Y)
-
+    # Y = (math.pi / 180) * Y
+    min_samples =24
+    y_pred = DBSCAN(eps=(4 * 0.01) * (0.1) ** 3, min_samples=min_samples).fit_predict(Y)
+    # 4 / 1110000
     # plt.scatter(Y[:200, 0], Y[:200, 1], c=y_pred[:200])
     # # plt.axis([0, 100, 0, 200])
     # # plt.axis('off')
@@ -35,10 +36,13 @@ if __name__ == '__main__':
 
     from IMR import initIMR
 
-    T = 10
+    T = min_samples*0.5
     I_CR = y_pred.reshape(1, -1)
     I_MR = initIMR(I_CR, T=T)
     from InitT1T2 import initT1T2
 
     T_MR1, T_MR2 = initT1T2(I_CR, I_MR, T=T)
+    from ImproveIMR import ImproveIMR
+
+    I_MR = ImproveIMR(I_MR, T_MR1, T_MR2, T)
     print()
